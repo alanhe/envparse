@@ -11,9 +11,9 @@ import (
 
 // A Param is the representation of a parameter.
 type Param struct {
-	name         string
-	required     bool
-	defaultValue string
+	Name         string
+	Required     bool
+	DefaultValue string
 }
 
 // EnvParser the parser.
@@ -23,12 +23,12 @@ type EnvParser struct {
 }
 
 func (e *EnvParser) paramValid(param *Param) bool {
-	return len(param.name) > 0
+	return len(param.Name) > 0
 }
 
 func (e *EnvParser) paramExists(param *Param) bool {
 	for _, p := range e.params {
-		if p.name == param.name {
+		if p.Name == param.Name {
 			return true
 		}
 	}
@@ -41,25 +41,25 @@ func (e *EnvParser) Add(param *Param) {
 		panic(fmt.Errorf("Invalid param %v!", *param))
 	}
 	if e.paramExists(param) {
-		panic(fmt.Errorf("Duplicated param: %s!", param.name))
+		panic(fmt.Errorf("Duplicated param: %s!", param.Name))
 	}
 	e.params = append(e.params, param)
 }
 
 // Parse panics when the enviroment variables are not set correctly.
-func (e *EnvParser) Parse(param *Param) {
+func (e *EnvParser) Parse() {
 	e.envs = make(map[string]string)
 	errs := []error{}
 
 	for _, p := range e.params {
-		val := strings.TrimSpace(os.Getenv(p.name))
+		val := strings.TrimSpace(os.Getenv(p.Name))
 		if len(val) == 0 {
-			val = p.defaultValue
+			val = p.DefaultValue
 		}
-		if p.required && len(val) == 0 {
-			errs = append(errs, fmt.Errorf("param %s is missing", p.name))
+		if p.Required && len(val) == 0 {
+			errs = append(errs, fmt.Errorf("param %s is missing", p.Name))
 		} else {
-			e.envs[p.name] = val
+			e.envs[p.Name] = val
 		}
 	}
 
