@@ -7,10 +7,10 @@ Usage:
 func main() {
     parser := envparse.New()
 
-    parser.Add(&envparse.Param{name: "DB_URL", required: true})
+    parser.Add(&envparse.Param{Name: "DB_URL", Required: true})
     parser.Parse() // panic if DB_URL is not set
 
-    dbURL := parser.getString("DB_URL") // retive a trimmed value
+    dbURL := parser.GetString("DB_URL") // retive a trimmed value
 
     // ...
 }
